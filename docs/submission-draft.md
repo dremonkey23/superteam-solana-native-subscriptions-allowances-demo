@@ -12,7 +12,7 @@ AI-Agent Allowance Controls for Solana Native Subscriptions
 
 ## Public repo link
 
-TBD — requires approval before publishing.
+https://github.com/dremonkey23/superteam-solana-native-subscriptions-allowances-demo
 
 ## Short description
 
@@ -41,7 +41,7 @@ The demo includes Canadian-aligned scenarios for the Superteam Canada bonus crit
 
 ### Repo
 
-`TBD_AFTER_APPROVAL`
+`https://github.com/dremonkey23/superteam-solana-native-subscriptions-allowances-demo`
 
 ### Demo video
 
@@ -57,10 +57,10 @@ This is a safe mock/devnet-design demo. It does not process live payments. Futur
 
 ## Pre-submit checklist
 
-- [ ] Public repo approved
-- [ ] Repo pushed
+- [x] Public repo approved
+- [x] Repo pushed
 - [ ] README checked on GitHub rendering
-- [ ] `npm run check` passes on clean clone
+- [x] `npm run check` passes on clean local repo
 - [ ] Demo video recorded or explicitly skipped
 - [ ] Social post drafted or explicitly skipped
 - [ ] Final Superteam submission approved
