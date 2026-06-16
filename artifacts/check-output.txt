@@ -1,0 +1,234 @@
+
+> superteam-solana-native-subscriptions-allowances-demo@1.0.0 demo
+> tsx src/mock-demo.ts
+
+
+AI-Agent Allowance Controls — Mock Demo
+Network: mock/local only | Mainnet: disabled | Private keys: none
+
+Policy: {
+  "policyId": "policy:demo-001",
+  "owner": "user:demo-owner-no-wallet",
+  "agentId": "agent:research-buyer",
+  "allowedMerchants": [
+    "merchant:canadian-devtools-saas"
+  ],
+  "perChargeLimit": 25,
+  "periodLimit": 60,
+  "cadenceDays": 30,
+  "tokenSymbol": "mock-USDC"
+}
+
+ALLOW: approved merchant under caps after cadence window
+Decision: APPROVED — approved
+Audit: {
+  "requestId": "req:allow-001",
+  "policyId": "policy:demo-001",
+  "merchantId": "merchant:canadian-devtools-saas",
+  "amount": 15,
+  "approved": true,
+  "reason": "approved",
+  "timestamp": "2026-06-16T14:00:00.000Z",
+  "remainingPeriodAllowance": 45
+}
+
+BLOCK: merchant not allowlisted
+Decision: REJECTED — merchant not allowlisted
+Audit: {
+  "requestId": "req:block-merchant",
+  "policyId": "policy:demo-001",
+  "merchantId": "merchant:unknown-saas",
+  "amount": 15,
+  "approved": false,
+  "reason": "merchant not allowlisted",
+  "timestamp": "2026-07-17T14:00:00.000Z",
+  "remainingPeriodAllowance": 60
+}
+
+BLOCK: amount exceeds per-charge cap
+Decision: REJECTED — amount exceeds per-charge limit
+Audit: {
+  "requestId": "req:block-per-charge",
+  "policyId": "policy:demo-001",
+  "merchantId": "merchant:canadian-devtools-saas",
+  "amount": 30,
+  "approved": false,
+  "reason": "amount exceeds per-charge limit",
+  "timestamp": "2026-07-17T14:00:00.000Z",
+  "remainingPeriodAllowance": 60
+}
+
+BLOCK: cadence violation
+Decision: REJECTED — cadence violation
+Audit: {
+  "requestId": "req:block-cadence",
+  "policyId": "policy:demo-001",
+  "merchantId": "merchant:canadian-devtools-saas",
+  "amount": 10,
+  "approved": false,
+  "reason": "cadence violation",
+  "timestamp": "2026-06-26T14:00:00.000Z",
+  "remainingPeriodAllowance": 45
+}
+
+BLOCK: period cap exceeded
+Decision: REJECTED — amount exceeds remaining period allowance
+Audit: {
+  "requestId": "req:block-period",
+  "policyId": "policy:demo-001",
+  "merchantId": "merchant:canadian-devtools-saas",
+  "amount": 10,
+  "approved": false,
+  "reason": "amount exceeds remaining period allowance",
+  "timestamp": "2026-07-16T14:00:00.000Z",
+  "remainingPeriodAllowance": 5
+}
+
+BLOCK: revoked policy
+Decision: REJECTED — policy revoked
+Audit: {
+  "requestId": "req:block-revoked",
+  "policyId": "policy:demo-001",
+  "merchantId": "merchant:canadian-devtools-saas",
+  "amount": 10,
+  "approved": false,
+  "reason": "policy revoked",
+  "timestamp": "2026-07-17T14:00:00.000Z",
+  "remainingPeriodAllowance": 60
+}
+
+BLOCK: expired policy
+Decision: REJECTED — policy expired
+Audit: {
+  "requestId": "req:block-expired",
+  "policyId": "policy:demo-001",
+  "merchantId": "merchant:canadian-devtools-saas",
+  "amount": 10,
+  "approved": false,
+  "reason": "policy expired",
+  "timestamp": "2026-06-16T14:00:00.000Z",
+  "remainingPeriodAllowance": 45
+}
+
+Canadian context:
+Example merchant: Canadian devtools SaaS / creator tooling vendor
+Use case: bounded AI-agent subscription payments for teams and builders.
+
+
+Solana primitive mapping preview:
+{
+  "mode": "design-only-no-rpc",
+  "policyId": "policy:demo-001",
+  "exampleMerchant": "merchant:canadian-devtools-saas",
+  "exampleDecision": "approved",
+  "mapping": [
+    {
+      "localConcept": "AllowancePolicy.policyId",
+      "solanaConcept": "Delegation PDA",
+      "note": "A fixed or recurring delegation account can encode the spend authority boundary."
+    },
+    {
+      "localConcept": "AllowancePolicy.owner",
+      "solanaConcept": "User authority / token owner",
+      "note": "The user creates or revokes the delegation; the agent does not receive unlimited wallet control."
+    },
+    {
+      "localConcept": "AllowancePolicy.allowedMerchants",
+      "solanaConcept": "Delegate / puller authorization",
+      "note": "A production design should constrain who can pull against the delegated authority."
+    },
+    {
+      "localConcept": "AllowancePolicy.perChargeLimit",
+      "solanaConcept": "Fixed delegation amount or subscription plan amount",
+      "note": "Single-charge controls map to plan/delegation amount checks."
+    },
+    {
+      "localConcept": "AllowancePolicy.periodLimit",
+      "solanaConcept": "Recurring delegation period cap",
+      "note": "Repeating caps reset by configured period length."
+    },
+    {
+      "localConcept": "Decision.auditEvent",
+      "solanaConcept": "Program event / indexed log",
+      "note": "Approved and rejected paths should produce inspectable evidence."
+    }
+  ]
+}
+
+Summary:
+Approved charges recorded: 1
+This demo made no RPC calls and sent no transactions.
+
+
+> superteam-solana-native-subscriptions-allowances-demo@1.0.0 test
+> node --import tsx --test tests/**/*.test.ts
+
+TAP version 13
+# Subtest: approves compliant charge
+ok 1 - approves compliant charge
+  ---
+  duration_ms: 1.671592
+  type: 'test'
+  ...
+# Subtest: rejects merchant not on allowlist
+ok 2 - rejects merchant not on allowlist
+  ---
+  duration_ms: 0.183835
+  type: 'test'
+  ...
+# Subtest: rejects charge above per-charge cap
+ok 3 - rejects charge above per-charge cap
+  ---
+  duration_ms: 0.158505
+  type: 'test'
+  ...
+# Subtest: rejects cadence violation
+ok 4 - rejects cadence violation
+  ---
+  duration_ms: 0.262127
+  type: 'test'
+  ...
+# Subtest: rejects rolling period cap overflow
+ok 5 - rejects rolling period cap overflow
+  ---
+  duration_ms: 0.293982
+  type: 'test'
+  ...
+# Subtest: rejects revoked policy
+ok 6 - rejects revoked policy
+  ---
+  duration_ms: 0.175295
+  type: 'test'
+  ...
+# Subtest: rejects expired policy
+ok 7 - rejects expired policy
+  ---
+  duration_ms: 0.231425
+  type: 'test'
+  ...
+# Subtest: audit event mirrors decision
+ok 8 - audit event mirrors decision
+  ---
+  duration_ms: 0.221158
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 239.892681
+
+> superteam-solana-native-subscriptions-allowances-demo@1.0.0 verify
+> tsx scripts/verify-safety.ts
+
+Safety verification passed.
+Scanned 17 public packet files.
+No unsafe network, key, env, or submission indicators found outside explicit safety language.
+
+> superteam-solana-native-subscriptions-allowances-demo@1.0.0 typecheck
+> tsc --noEmit
+

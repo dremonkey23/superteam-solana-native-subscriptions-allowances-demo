@@ -1,0 +1,25 @@
+{
+  "name": "superteam-solana-native-subscriptions-allowances-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node --import tsx --test tests/**/*.test.ts",
+    "demo": "tsx src/mock-demo.ts",
+    "verify": "tsx scripts/verify-safety.ts",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run demo && npm run test && npm run verify && npm run typecheck"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
