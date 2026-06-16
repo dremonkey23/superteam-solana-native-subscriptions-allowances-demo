@@ -59,8 +59,9 @@ This is a safe mock/devnet-design demo. It does not process live payments. Futur
 
 - [x] Public repo approved
 - [x] Repo pushed
-- [ ] README checked on GitHub rendering
-- [x] `npm run check` passes on clean local repo
+- [x] README checked on GitHub rendering
+- [x] `npm run check` passes on clean clone
+- [x] Paste-ready submission text prepared
 - [ ] Demo video recorded or explicitly skipped
 - [ ] Social post drafted or explicitly skipped
 - [ ] Final Superteam submission approved
